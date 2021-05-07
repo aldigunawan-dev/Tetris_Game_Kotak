@@ -448,7 +448,7 @@ def main_menu(win):
     exit_button = button((252,82,3), top_left_x + play_width/2 - 110, top_left_y + play_height/2  +100 , 350, 150, "Keluar")
     while run :
         win.fill((255,255,255))
-        draw_text_middle("Game Kotak", 100, (0,0,0), win, -300, True)
+        draw_text_middle("Game Kotak", 120, (0,0,0), win, -280, True)
         start_button.draw(win, (255,255,255))
         exit_button.draw(win, (225,225,225))
         pygame.display.update()
