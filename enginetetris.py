@@ -151,7 +151,8 @@ class button():
             text = font.render(self.text, 1, (0,0,0))
             win.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
 
-    def isOver(self, pos):
+    #cek apakah cursor di atas tombol
+    def is_over(self, pos):
         #Pos adalah posisi mouse atau tuple (x,y)
         if pos[0] > self.x and pos[0] < self.x + self.width:
             if pos[1] > self.y and pos[1] < self.y + self.height:
@@ -460,12 +461,12 @@ def main_menu(win):
                 pygame.display.quit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if start_button.isOver(pos):
+                if start_button.is_over(pos):
                     main(win)
-                if exit_button.isOver(pos):
+                if exit_button.is_over(pos):
                     pygame.display.quit()
             if event.type == pygame.MOUSEMOTION:
-                if start_button.isOver(pos):
+                if start_button.is_over(pos):
                     start_button.color = (201,76,48)
                 else :
                     start_button.color = (50,168,84)
