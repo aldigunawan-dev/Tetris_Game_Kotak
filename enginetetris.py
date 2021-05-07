@@ -416,7 +416,7 @@ def main(win):
         if total_cleared >= 25:
             fall_speed == 0.15
         #cek win/lose condition
-        if total_cleared >=50 or check_lost == True:
+        if total_cleared >=50 or check_lost(locked_positions) == True:
             win.fill((0,0,0))
             draw_text_middle("Permainan Berakhir", 50, (255,255,255), win, -250)
             if total_cleared >=50:
