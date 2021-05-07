@@ -5,7 +5,7 @@ import random
 pygame.font.init()
 pygame.mixer.init()
 
-# Variabel Globa
+# Variabel Global
 s_width = 700
 s_height = 700
 play_width = 300
@@ -128,7 +128,7 @@ T = [['.....',
  
 shapes = [S, Z, I, O, J, L, T]
 shape_colors = [(0, 255, 0), (255, 0, 0), (0, 255, 255), (255, 255, 0), (255, 165, 0), (0, 0, 255), (128, 0, 128)]
-# index 0 - 6 represent shape
+# index 0 - 6 shapes
  
 class button():
     def __init__(self, color, x,y,width,height, text=''):
@@ -152,7 +152,7 @@ class button():
             win.blit(text, (self.x + (self.width/2 - text.get_width()/2), self.y + (self.height/2 - text.get_height()/2)))
 
     def isOver(self, pos):
-        #Pos is the mouse position or a tuple of (x,y) coordinates
+        #Pos adalah posisi mouse atau tuple (x,y)
         if pos[0] > self.x and pos[0] < self.x + self.width:
             if pos[1] > self.y and pos[1] < self.y + self.height:
                 return True
@@ -163,6 +163,7 @@ class Piece(object):
         self.x = x
         self.y = y
         self.shape = shape
+
         #warna ditentukan oleh index dari bentuk
         self.color = shape_colors[shapes.index(shape)]
         self.rotation = 0
@@ -194,6 +195,7 @@ def convert_shape_format(shape):
             if column == '0':
                 positions.append((shape.x + j, shape.y + i))
     #menghilangkan offset
+
     for i, pos in enumerate(positions):
         positions[i] = (pos[0] - 2, pos[1] - 4)
  
@@ -214,7 +216,7 @@ def valid_space(shape, grid):
     return True
 
 def check_lost(positions):
-    #selama posisi shapes di bawah batas atas layar, game masih berjalan
+    #Cek jika shapes berhenti di atas layar
     for pos in positions:
         x, y = pos
         if y < 1:
@@ -223,7 +225,8 @@ def check_lost(positions):
 
 def get_shape():
     global shapes, shape_colors
-    #memili shapes random
+
+    #memilih shapes random
     return Piece(5, 0, random.choice(shapes))
  
  
@@ -247,14 +250,17 @@ def draw_grid(surface, row, col):
 
 def clear_rows(grid, locked):
     inc = 0
+    
     #cek grid, apakah row memiliki block kosong
     for i in range(len(grid)-1, -1, -1):
         row = grid[i]
         if (0,0,0) not in row:
             inc += 1
+            
             #posisi baris yang harus di hapus
             ind = i
             #hapus baris
+            
             for j in range(len(row)):
                 try:
                     del locked[(j,i)]
@@ -263,7 +269,6 @@ def clear_rows(grid, locked):
     #pindahkan row di atas cleared row ke bawah
     if inc > 0:
         pygame.mixer.Sound.play(sound_rowclear)
-        #sortir berdasarkan y-value
         for key in sorted(list(locked), key=lambda x: x[1])[::-1]:
             x, y = key
             if y < ind:
@@ -275,10 +280,12 @@ def draw_next_shape(shape, surface):
     #label
     font = pygame.font.Font("resource/8bit.ttf", 30)
     label = font.render('Shape berikutnya', 1, (255,255,255))
+    
     #lokasi label
     sx = top_left_x + play_width + 55
     sy = top_left_y + play_height/2 - 100
-    #diplay shape selanjutnya
+    
+    #display shape selanjutnya
     format = shape.shape[shape.rotation % len(shape.shape)]
 
     for i, line in enumerate(format):
@@ -306,7 +313,7 @@ def draw_window(surface, grid, score):
     #lokasi label
     sx = top_left_x + play_width + 50
     sy = top_left_y + play_height/2 - 100
-
+    #cetak label
     surface.blit(label, (sx + 10, sy + 160))
 
     for i in range(len(grid)):
@@ -319,10 +326,6 @@ def draw_window(surface, grid, score):
     #gambar grid
     draw_grid(surface, 20, 10)
 
-    #update screen
-    #pygame.display.update()
-
-
 def main(win):
     #Variabel
 
@@ -334,7 +337,7 @@ def main(win):
     next_piece = get_shape()
     clock = pygame.time.Clock()
     fall_time = 0
-    fall_speed = 0.50
+    fall_speed = 0.30
     score = 0
     cleared_rows= 0
     total_cleared = 0
@@ -410,7 +413,7 @@ def main(win):
         #cek score
         #tambah fall speed
         if total_cleared >= 25:
-            fall_speed == 0.25
+            fall_speed == 0.15
         #cek win/lose condition
         if total_cleared >=50 or check_lost == True:
             win.fill((0,0,0))
@@ -439,11 +442,13 @@ def main_menu(win):
     pygame.mixer.music.play(-1)
     pygame.mixer.music.set_volume(0.2)
     #Tombol start
-    start_button = button((50,168,84), top_left_x + play_width/2 - 40, top_left_y + play_height/2  - 50, 200, 100, "Start!")
+    start_button = button((50,168,84), top_left_x + play_width/2 - 110, top_left_y + play_height/2  - 100, 350, 150, "Permainan Baru!")
+    exit_button = button((252,82,3), top_left_x + play_width/2 - 110, top_left_y + play_height/2  +100 , 350, 150, "Keluar")
     while run :
         win.fill((255,255,255))
         draw_text_middle("Game Kotak", 100, (0,0,0), win, -300, True)
         start_button.draw(win, (255,255,255))
+        exit_button.draw(win, (225,225,225))
         pygame.display.update()
 
         for event in pygame.event.get():
@@ -451,11 +456,13 @@ def main_menu(win):
 
             if event.type == pygame.QUIT:
                 run = False
-                pygame.quit()
+                pygame.display.quit()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start_button.isOver(pos):
                     main(win)
+                if exit_button.isOver(pos):
+                    pygame.display.quit()
             if event.type == pygame.MOUSEMOTION:
                 if start_button.isOver(pos):
                     start_button.color = (201,76,48)
