@@ -410,6 +410,7 @@ def main(win):
                 score += (cleared_rows * 10)*2
             else :
                 score += cleared_rows * 10
+            cleared_rows = 0
         #cek score
         #tambah fall speed
         if total_cleared >= 25:
