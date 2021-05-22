@@ -299,7 +299,7 @@ def draw_next_shape(shape, surface):
     surface.blit(label, (sx , sy - 60))
 
 def draw_window(surface, grid, score):
-	#menggambar windows
+	#menggambar windows gameplay
     surface.fill((153, 176, 176))
 
     #mengambar label "Game Kotak"
